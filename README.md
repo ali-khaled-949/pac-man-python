@@ -3,7 +3,7 @@ Creating a Pac-Man using python pygame
 
 
 Developers
-Ali Khaled
+Ali Khaled and 
 Tri Bui
 
 Overview
