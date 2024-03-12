@@ -1,5 +1,5 @@
 # pac-man-python
-Creating a Pac-Man using python pygame
+Creating Pac-Man using python pygame
 
 
 Developers: <br>
