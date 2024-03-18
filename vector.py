@@ -50,3 +50,4 @@ class Vector2(object):
 
     def __str__(self):
         return "<"+str(self.x)+", "+str(self.y)+">"
+
