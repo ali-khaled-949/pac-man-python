@@ -11,11 +11,11 @@ pygame.init()
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+    [1, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
     [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
-    [1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 4, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1],
+    [1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 4, 2, 2, 1, 2, 3, 2, 1, 2, 2, 1],
     [1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
     [1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 1],
     [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1],
@@ -38,7 +38,7 @@ maze = [
 GHOST_HOUSE = 5
 PELLET = 2
 POWER_PELLET = 3
-POWER_UP_DURATION = 300
+POWER_UP_DURATION = 1800
 
 maze[6][10] = GHOST_HOUSE
 maze[6][11] = GHOST_HOUSE
@@ -107,7 +107,17 @@ class Ghost:
         self.speed = 1.5  # Adjust ghost speed
         self.direction = random.choice(['left', 'right', 'up', 'down'])
         self.x, self.y = self.find_valid_start_position()
+    
+    def reset_to_house(self):
+        self.x, self.y = self.find_valid_start_position()
+        self.direction = random.choice(['left', 'right', 'up', 'down'])
+        self.flashing = False
+        self.color = random.choice([RED, YELLOW, GREEN, PINK, CYAN, ORANGE])
+        self.behavior = random.choice(['left', 'right', 'up', 'down'])
+        self.speed = 1.5  # Adjust ghost speed
 
+        
+        
     def find_valid_start_position(self):
         while True:
             x = random.randint(0, num_cols - 1) * cell_size + cell_size // 2
@@ -172,6 +182,8 @@ power_pellet_sound = pygame.mixer.Sound('power_pellet.wav')
 eat_ghost_sound = pygame.mixer.Sound('eat_ghost.wav')
 eat_pellet_sound = pygame.mixer.Sound('eat_pellet.wav')
 game_over_sound = pygame.mixer.Sound('game_over.wav')
+soft_sound = pygame.mixer.Sound('pacman_intermission.wav')
+
 
 # Adjusting sound volume
 game_over_sound.set_volume(0.5)  
@@ -363,10 +375,11 @@ while True:
         if maze[grid_y][grid_x] == 3:  # Check if Pac-Man overlaps with a power pellet
             maze[grid_y][grid_x] = 0  # Remove the power pellet
             powered_up = True  # Set powered up flag
+            power_pellet_sound.play()
             power_up_timer = POWER_UP_DURATION  # Set the duration of the power-up
             for ghost in ghosts:
                 ghost.flashing = True  # Make the ghosts start flashing
-
+        
         for ghost in ghosts:
             distance = ((pacman_x - ghost.x) ** 2 + (pacman_y - ghost.y) ** 2) ** 0.5
             if distance < cell_size:  # Adjust threshold as needed
@@ -428,6 +441,7 @@ while True:
             ghost.draw(screen)
             if powered_up and abs(pacman_x - ghost.x) < cell_size // 2 and abs(pacman_y - ghost.y) < cell_size // 2:
                 ghosts.remove(ghost)
+                ghost.reset_to_house()
                 eat_ghost_sound.play()
                 if ghost_eaten_timer == 0:
                     eat_ghost_sound.play()
@@ -439,6 +453,8 @@ while True:
             if abs(ghost.x - pacman_x) < cell_size // 2 and abs(ghost.y - pacman_y) < cell_size // 2:
                 if powered_up:
                     score += 200
+                    soft_sound.play(-1)  # Play the soft sound continuously
+
                     ghost.x, ghost.y = ghost.find_valid_start_position()
                     powered_up = False
                     ghost_eaten_timer = pygame.time.get_ticks()
@@ -452,7 +468,12 @@ while True:
                     else:
                         pacman_x = 12 * cell_size + cell_size // 2
                         pacman_y = 17 * cell_size + cell_size // 2
-
+                        pacman_x = 12 * cell_size + cell_size // 2
+                        pacman_y = 17 * cell_size + cell_size // 2
+                        ghost.reset_to_house()  # Reset the collided ghost to the ghost house
+                        pygame.time.delay(1000)  # Pause briefly after collision
+                        
+                        
         # Timer countdown for sound effects
         if pellet_timer > 0:
             pellet_timer -= 1
@@ -475,6 +496,13 @@ while True:
         # Update the display
         pygame.display.flip()
 
+        if power_up_timer > 0:
+            power_up_timer -= 1
+            if power_up_timer == 0:
+                powered_up = False  # R
+                soft_sound.stop()
+        
+        
         # Check for game over condition
         if game_over:
             # Display game over screen
