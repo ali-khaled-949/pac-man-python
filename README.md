@@ -35,7 +35,7 @@ Design and implement the game's UI, including the score display and lives counte
 Implement the high score system.
 
 Sound Effects
-Add sound effects for game actions (optional, depending on time and resources).
+Credit: (https://www.classicgaming.cc/classics/pac-man/sounds).
 
 Documentation
 Document the game's design, code structure, and instructions for players.
