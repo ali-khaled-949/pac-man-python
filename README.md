@@ -4,7 +4,8 @@ Creating Pac-Man using python pygame
 
 Developers: <br>
 Ali Khaled Email: alikhaled@csu.fullerton.edu <br> 
-Tri Bui Email: 
+Tri Bui Email: triminhbui@csu.fullerton.edu
+
 
 Total Contributions in Github: 
 
