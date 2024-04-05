@@ -1,9 +1,3 @@
-#Developers:
-#Ali Khaled
-#Tri Bui
-#CPSC 386 
-
-
 import pygame
 import sys
 import random
@@ -92,7 +86,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pac-Man")
 
 # Set up the display
-game_over_bg = pygame.image.load('background_4.png')
+game_over_bg = pygame.image.load('background_3.png')
 game_over_bg = pygame.transform.scale(game_over_bg, (screen_width,screen_height))  # Scale it to fit the screen
 
 # Score
@@ -325,13 +319,6 @@ def intro_screen():
         screen.fill((0, 0, 0))  # Clear the screen
         screen.blit(game_over_bg, (0, 0))  # Draw the background image first
         
-        # Load and render high score
-        high_score_text = "High Score: " + str(high_score)
-        font_score = pygame.font.Font(None, 36)
-        text_score = font_score.render(high_score_text, True, WHITE)
-        screen.blit(text_score, (screen_width // 2 - text_score.get_width() // 2, 75))
-
-        
         # Draw title
         font = pygame.font.Font(None, 64)
         text = font.render('PAC-MAN', True, YELLOW)
@@ -348,14 +335,13 @@ def intro_screen():
 
         pygame.display.update()
         clock.tick(15)
-        
 clock = pygame.time.Clock()
 intro_screen()
 
 
 def restart_game():
     print ("restart")
-    global score, pacman_x, pacman_y, powered_up, power_up_timer, pellet_timer, power_pellet_timer, ghost_eaten_timer, game_over, lives, maze
+    global score, pacman_x, pacman_y, powered_up, power_up_timer, pellet_timer, power_pellet_timer, ghost_eaten_timer, game_over, lives
     score = 0
     pacman_x = 12 * cell_size + cell_size // 2
     pacman_y = 17 * cell_size + cell_size // 2
@@ -368,29 +354,6 @@ def restart_game():
     lives = 3
     for ghost in ghosts:
         ghost.x, ghost.y = ghost.find_valid_start_position()
-    maze = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 1],
-    [1, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
-    [0, 2, 2, 1, 2, 2, 2, 1, 2, 2, 0, 2, 2, 1, 2, 2, 2, 1, 2, 2, 4],
-    [1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
-    [1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 1],
-    [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1],
-    [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1],
-    [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-    [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
-    [1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1],
-    [0, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 4],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1],
-    [1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-]
 
 
 def draw_button_text(text, font):

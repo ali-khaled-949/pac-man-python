@@ -6,16 +6,14 @@ import random
 pygame.init()
 
 # Maze layout
-# Maze layout
-# Maze layout
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 1],
-    [1, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
-    [0, 2, 2, 1, 2, 2, 2, 1, 2, 2, 0, 2, 2, 1, 2, 2, 2, 1, 2, 2, 4],
+    [1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 0, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1],
     [1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1],
     [1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 1],
     [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1],
@@ -26,44 +24,18 @@ maze = [
     [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
     [1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1],
-    [0, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 4],
     [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1],
-    [1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1],
+    [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
-# Visual representation of the ghost house
-
-
-GHOST_HOUSE = 5
-PELLET = 2
-POWER_PELLET = 3
-POWER_UP_DURATION = 1700
-
-maze[6][10] = GHOST_HOUSE
-maze[6][11] = GHOST_HOUSE
-maze[7][10] = GHOST_HOUSE
-maze[7][11] = GHOST_HOUSE
-
-
-
-# Initialize high score
 high_score = 0
-
-# Try to load the high score from a file
 try:
     with open("high_score.txt", "r") as f:
-        file_content = f.read().strip()
-        # Ensure the file content is not empty and is a digit before converting
-        if file_content.isdigit():
-            high_score = int(file_content)
-        else:
-            print("High score file is empty or contains non-numeric data.")
-            high_score = 0
+        high_score = int(f.read().strip())
 except FileNotFoundError:
-    print("High score file not found. A new file will be created.")
     high_score = 0
-
 # Set colors
 WHITE = (255, 255, 255)
 BLUE = (33, 33, 255)
@@ -75,16 +47,19 @@ CYAN = (0, 255, 255)
 ORANGE =(255, 184, 82)
 
 # Calculate maze dimensions
+num_rows = len(maze)
+num_cols = len(maze[0])
+
+# Set cell size
 cell_size = 40
-num_cols = 21
-num_rows = 21
+
 # Calculate window size
 screen_width = num_cols * cell_size
 screen_height = num_rows * cell_size
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Pac-Man")
 
 # Set up the display
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Pac-Man")
 
 # Score
 score = 0
@@ -100,74 +75,21 @@ pacman_y = 17 * cell_size + cell_size // 2
 
 pacman_speed = 1  # Adjust Pac-Man speed
 
-
-class Fruit:
-    def __init__(self, x, y, points):
-        self.x = x
-        self.y = y
-        self.points = points
-
-# Define the fruit bonuses and their positions
-fruits = [
-            Fruit(1 * cell_size + cell_size // 2, 1 * cell_size + cell_size // 2, 100),
-          Fruit(18 * cell_size + cell_size // 2, 1 * cell_size + cell_size // 2, 300),
-          Fruit(1 * cell_size + cell_size // 2, 18 * cell_size + cell_size // 2, 500),
-          Fruit(19 * cell_size + cell_size // 2, 18 * cell_size + cell_size // 2, 700)
-          ]
-
-
-
-
 # Define Ghost class
 class Ghost:
-    def __init__(self, image_path, color, behavior):
-        self.image = pygame.image.load(image_path).convert_alpha()
+    def __init__(self, color, behavior):
+        self.color = color
         self.behavior = behavior
-        self.flashing = False
-        self.flash_timer = 0
-        self.color = WHITE 
-        #self.color = color
         self.speed = 1.5  # Adjust ghost speed
         self.direction = random.choice(['left', 'right', 'up', 'down'])
         self.x, self.y = self.find_valid_start_position()
 
-    def reset_to_house(self):
-        self.x, self.y = self.find_valid_start_position()
-        self.direction = random.choice(['left', 'right', 'up', 'down'])
-        self.flashing = False
-        self.color = random.choice([RED, YELLOW, GREEN, PINK, CYAN, ORANGE])
-        self.behavior = random.choice(['left', 'right', 'up', 'down'])
-        self.speed = 1.5  # Adjust ghost speed
-
-        
-        
     def find_valid_start_position(self):
-        blue_wall_positions = []
-        for y, row in enumerate(maze):
-            for x, cell in enumerate(row):
-                if cell == 1:
-                    blue_wall_positions.append((x * cell_size, y * cell_size))
-
-        # Calculate the midpoint
-        midpoint_x = sum(x for x, _ in blue_wall_positions) // len(blue_wall_positions)
-        midpoint_y = sum(y for _, y in blue_wall_positions) // len(blue_wall_positions)
-
-        # Ensure the midpoint is within the maze boundaries
-        midpoint_x = max(cell_size // 2, min(midpoint_x, screen_width - cell_size // 2))
-        midpoint_y = max(cell_size // 2, min(midpoint_y, screen_height - cell_size // 2))
-
-        # Ensure the midpoint is not within the ghost house
-        if not (8 <= midpoint_x // cell_size <= 12 and 8 <= midpoint_y // cell_size <= 12):
-            return midpoint_x, midpoint_y
-
-        # If the midpoint is within the ghost house, find another valid position
         while True:
             x = random.randint(0, num_cols - 1) * cell_size + cell_size // 2
             y = random.randint(0, num_rows - 1) * cell_size + cell_size // 2
-            if maze[y // cell_size][x // cell_size] != 1 and not (8 <= x // cell_size <= 12 and 8 <= y // cell_size <= 12):
+            if maze[y // cell_size][x // cell_size] != 1:
                 return x, y
-
-            
 
     def move(self):
         dx, dy = 0, 0
@@ -194,43 +116,20 @@ class Ghost:
 
     def is_valid_position(self, x, y):
         # Check if the new position is within the maze boundaries and not a wall
-        if x < 0:
-            x = screen_width - cell_size // 2
-        elif x >= screen_width:
-            x = cell_size // 2
-        return maze[y // cell_size][x // cell_size] != 1
+        return 0 <= x < screen_width and 0 <= y < screen_height and maze[y // cell_size][x // cell_size] != 1
 
-    
-    
     def draw(self, screen):
-        if self.flashing and powered_up:
-            # Alternate between the ghost's color and white every 10 frames
-            frame_count = pygame.time.get_ticks() // 100  # Adjust 100 to change flashing speed
-            if frame_count % 2 == 0:
-                draw_color = self.color
-            else:
-                draw_color = WHITE
-        else:
-            draw_color = self.color
-        screen.blit(self.image, (self.x - cell_size // 2, self.y - cell_size // 2))
+        pygame.draw.circle(screen, self.color, (self.x, self.y), cell_size // 2)
 
 
 
 # Create ghosts
-#ghosts = [Ghost(RED, 'chase'), Ghost(PINK, 'ambush'), Ghost(CYAN, 'random'), Ghost(ORANGE, 'scatter')]
+ghosts = [Ghost(RED, 'chase'), Ghost(PINK, 'ambush'), Ghost(CYAN, 'random'), Ghost(ORANGE, 'scatter')]
 
-#blinky = Ghost(RED, 'chase')
-#pinky = Ghost(PINK, 'ambush')
-#inky = Ghost(CYAN, 'random')
-#clyde = Ghost(ORANGE, 'scatter')
-blinky = Ghost('blinky_image.png', RED, 'chase')
-pinky = Ghost('pinky_image.png', PINK, 'ambush')
-inky = Ghost('inky_image.png', CYAN, 'random')
-clyde = Ghost('clyde_image.png', ORANGE, 'scatter')
-ghosts = [blinky, pinky, inky, clyde]
-
-tunnel_entrance = (0, 10)  # Example coordinates, adjust as needed
-tunnel_exit = (20, 10)     # Example coordinates, adjust as needed
+blinky = Ghost(RED, 'chase')
+pinky = Ghost(PINK, 'ambush')
+inky = Ghost(CYAN, 'random')
+clyde = Ghost(ORANGE, 'scatter')
 
 # Sound effects
 pellet_sound = pygame.mixer.Sound('pellet.wav')
@@ -238,8 +137,6 @@ power_pellet_sound = pygame.mixer.Sound('power_pellet.wav')
 eat_ghost_sound = pygame.mixer.Sound('eat_ghost.wav')
 eat_pellet_sound = pygame.mixer.Sound('eat_pellet.wav')
 game_over_sound = pygame.mixer.Sound('game_over.wav')
-soft_sound = pygame.mixer.Sound('pacman_intermission.wav')
-
 
 # Adjusting sound volume
 game_over_sound.set_volume(0.5)  
@@ -348,39 +245,12 @@ while game_over:
     screen.blit(restart_button_text, restart_button_rect)
     screen.blit(quit_button_text, quit_button_rect)
     pygame.display.flip()
-
     
-    
-# Main game loop
 # Main game loop
 # Main game loop
 while True:
     running = True
-    while running:  
-        if pacman_x < 0:
-            pacman_x = screen_width  # Wrap around to the right side of the screen
-        elif pacman_x > screen_width:
-            pacman_x = 0  # Wrap around to the left side of the screen
-        
-        # Adjust Pac-Man's position when moving through the tunnel
-        # Adjust Pac-Man's position when moving through the tunnel
-        if pacman_x == 0 and grid_x == tunnel_entrance[0]:  # If Pac-Man reaches the left side and is at the tunnel entrance
-            pacman_x = screen_width - cell_size  # Place Pac-Man at the right side of the screen
-        elif pacman_x == screen_width - cell_size and grid_x == tunnel_exit[0]:  # If Pac-Man reaches the right side and is at the tunnel exit
-            pacman_x = 0  # Place Pac-Man at the left side of the screen
-        
-        
-        for ghost in ghosts:
-            if ghost.x < 0:
-                ghost.x = screen_width  # Wrap around to the right side of the screen
-            elif ghost.x > screen_width:
-                ghost.x = 0  # Wrap around to the left side of the screen
-        for fruit in fruits:
-            if grid_x == fruit.x // cell_size and grid_y == fruit.y // cell_size:
-                score += fruit.points
-                fruits.remove(fruit)
-                break
-
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -397,8 +267,6 @@ while True:
                     pygame.draw.circle(screen, WHITE, (col_index * cell_size + cell_size // 2, row_index * cell_size + cell_size // 2), 5)
                 elif cell == 3:  # Power Pellet
                     pygame.draw.circle(screen, YELLOW, (col_index * cell_size + cell_size // 2, row_index * cell_size + cell_size // 2), 10)
-                elif cell == GHOST_HOUSE:  # Ghost house
-                    pygame.draw.rect(screen, GREEN, (col_index * cell_size, row_index * cell_size, cell_size, cell_size))
 
         # Handle Pac-Man movement
         keys = pygame.key.get_pressed()
@@ -415,10 +283,6 @@ while True:
         elif keys[pygame.K_DOWN]:
             dy += pacman_speed
             pacman_direction = 'down'
-            
-        if maze[pacman_y // cell_size][pacman_x // cell_size] == 1:
-            pacman_x = max(0, min(pacman_x, screen_width - cell_size))
-            pacman_y = max(0, min(pacman_y, screen_height - cell_size))
 
         # Calculate the new position
         new_x = pacman_x + dx
@@ -445,54 +309,7 @@ while True:
             'down': 270
         }[pacman_direction])
         screen.blit(rotated_pacman, (pacman_x - cell_size // 2, pacman_y - cell_size // 2))
-        
-        if maze[grid_y][grid_x] == 3:  # Check if Pac-Man overlaps with a power pellet
-            maze[grid_y][grid_x] = 0  # Remove the power pellet
-            powered_up = True  # Set powered up flag
-            power_pellet_sound.play()
-            power_up_timer = POWER_UP_DURATION  # Set the duration of the power-up
-            for ghost in ghosts:
-                ghost.flashing = True  # Make the ghosts start flashing
-        
-        for ghost in ghosts:
-            distance = ((pacman_x - ghost.x) ** 2 + (pacman_y - ghost.y) ** 2) ** 0.5
-            if powered_up:  # Check if Pac-Man is powered up
-                # Implement flashing timing
-                frame_count = pygame.time.get_ticks() // 100  # Adjust 100 to change flashing speed
-                if frame_count % 2 == 0:
-                    # Draw the regular ghost image
-                    screen.blit(ghost.image, (int(ghost.x), int(ghost.y)))
-                else:
-                    # Draw a translucent version of the ghost image
-                    ghost_image_flash = ghost.image.copy()
-                    ghost_image_flash.fill((255, 255, 255, 128), None, pygame.BLEND_RGBA_MULT)
-                    screen.blit(ghost_image_flash, (int(ghost.x), int(ghost.y)))
-            else:
-                # Draw the regular ghost image
-                screen.blit(ghost.image, (int(ghost.x), int(ghost.y)))
-            
-            if distance < cell_size:  # Adjust threshold as needed
-                if powered_up:
-                    # Pac-Man eats the ghost
-                    ghost.x, ghost.y = ghost.find_valid_start_position()  # Reset ghost to start position
-                    score += 200  # Increase score
-                    eat_ghost_sound.play()  # Play eating sound effect
-                    # Implement a delay before the ghost re-enters the game, if desired
-                else:
-                    # Game over logic
-                    lives -= 1
-                    if lives <= 0:
-                        game_over = True
-                        game_over_sound.play()  # Play game over sound effect
-                    else:
-                        # Reset Pac-Man and ghosts to initial positions
-                        pacman_x, pacman_y = 12 * cell_size + cell_size // 2, 17 * cell_size + cell_size // 2
-                        for ghost in ghosts:
-                            ghost.x, ghost.y = ghost.find_valid_start_position()
-                        pygame.time.delay(1000)  # Pause briefly after collision
 
-
-         
         # Check for pellet consumption
         if 0 <= grid_x < num_cols and 0 <= grid_y < num_rows:
             cell_value = maze[grid_y][grid_x]
@@ -527,10 +344,9 @@ while True:
                     pygame.time.delay(1000)  # Pause briefly after collision
 
             ghost.move()
-            #ghost.draw(screen)
+            ghost.draw(screen)
             if powered_up and abs(pacman_x - ghost.x) < cell_size // 2 and abs(pacman_y - ghost.y) < cell_size // 2:
                 ghosts.remove(ghost)
-                ghost.reset_to_house()
                 eat_ghost_sound.play()
                 if ghost_eaten_timer == 0:
                     eat_ghost_sound.play()
@@ -542,8 +358,6 @@ while True:
             if abs(ghost.x - pacman_x) < cell_size // 2 and abs(ghost.y - pacman_y) < cell_size // 2:
                 if powered_up:
                     score += 200
-                    soft_sound.play(-1)  # Play the soft sound continuously
-
                     ghost.x, ghost.y = ghost.find_valid_start_position()
                     powered_up = False
                     ghost_eaten_timer = pygame.time.get_ticks()
@@ -557,12 +371,7 @@ while True:
                     else:
                         pacman_x = 12 * cell_size + cell_size // 2
                         pacman_y = 17 * cell_size + cell_size // 2
-                        pacman_x = 12 * cell_size + cell_size // 2
-                        pacman_y = 17 * cell_size + cell_size // 2
-                        ghost.reset_to_house()  # Reset the collided ghost to the ghost house
-                        pygame.time.delay(1000)  # Pause briefly after collision
-                        
-                        
+
         # Timer countdown for sound effects
         if pellet_timer > 0:
             pellet_timer -= 1
@@ -571,9 +380,6 @@ while True:
         if ghost_eaten_timer > 0:
             ghost_eaten_timer -= 1
 
-        lives_text = font.render("High Score: " + str(high_score), True, WHITE)
-        screen.blit(lives_text, (300, 10))
-
         # Draw score
         score_text = font.render("Score: " + str(score), True, WHITE)
         screen.blit(score_text, (10, 10))
@@ -581,19 +387,10 @@ while True:
         # Draw lives
         lives_text = font.render("Lives: " + str(lives), True, WHITE)
         screen.blit(lives_text, (screen_width - 100, 10))
-        for fruit in fruits:
-            pygame.draw.circle(screen, RED, (fruit.x, fruit.y), 11)  # You can adjust the color and size as needed
 
         # Update the display
         pygame.display.flip()
 
-        if power_up_timer > 0:
-            power_up_timer -= 1
-            if power_up_timer == 0:
-                powered_up = False  # R
-                soft_sound.stop()
-        
-        
         # Check for game over condition
         if game_over:
             # Display game over screen
@@ -623,16 +420,4 @@ while True:
                 quit_button_rect = quit_button_text.get_rect(center=(screen_width // 2, screen_height // 2 + 120))
                 screen.blit(restart_button_text, restart_button_rect)
                 screen.blit(quit_button_text, quit_button_rect)
-                lives_text = font.render("High Score: " + str(high_score), True, WHITE)
-                screen.blit(lives_text, (50, 10))
                 pygame.display.flip()
-                if score > high_score:
-                    high_score = score
-            # Optionally, display a message or animation celebrating the new high score
-        # Save the high score to a file
-                    with open("high_score.txt", "w") as f:
-                        f.write(str(high_score))
-                        high_score_text = font.render("High Score: " + str(high_score), True, WHITE)
-                        screen.blit(high_score_text, (300, 200))
-                
-

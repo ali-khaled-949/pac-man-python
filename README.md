@@ -6,6 +6,8 @@ Developers: <br>
 Ali Khaled <br>
 Tri Bui
 
+Total Contributions in Github: 
+
 Overview
 The objective of this project is to create a clone of the classic arcade game Pac-Man. The game will be developed using Python and the Pygame library, ensuring it runs on most desktop environments. This project aims to replicate the core gameplay mechanics of the original game, providing a nostalgic experience for players.
 
@@ -20,6 +22,8 @@ Create the main game loop structure.
 
 Game Assets
 Design or source game assets, including sprites for Pac-Man, ghosts, dots, and mazes.
+
+Credit: https://www.giantbomb.com/inky/3005-245/
 
 Core Gameplay
 Implement Pac-Man's movement and wall collision detection.
